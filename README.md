@@ -7,6 +7,7 @@
 ## Úvod
 
 Táto práca sa zaoberá analýzou dát Dopravné nehody v Brne. Cieľom práce je preskúmať a overiť niekoľko hypotéz.
+Aby python program fungoval tak treba stiahnuť dáta vo formáte csv do priečinku data.
 
 ### Použité dáta
 * **Zdroj:** Data Brno - [Dopravné nehody v Brne](https://data.brno.cz/datasets/298c37feb1064873abdccdc2a10b605f_0)
