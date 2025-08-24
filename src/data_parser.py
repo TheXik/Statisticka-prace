@@ -128,6 +128,40 @@ def plot_hourly_trend(df):
     plt.close(fig)
 
 
+def perform_t_test(df):
+    """Performs an independent t-test and prints the results."""
+    
+    #Group accidents by dates 
+    daily_counts = df.groupby(df['date'].dt.date).size()
+
+    #split into two groups by index 
+    index_datumov = pd.to_datetime(daily_counts.index)
+    workdays = daily_counts[index_datumov.dayofweek < 5]
+    weekdays = daily_counts[index_datumov.dayofweek >= 5]
+
+    mean_workday = workdays.mean()
+    mean_weekday = weekdays.mean()
+
+    t_stat, p_value = stats.ttest_ind(workdays, weekdays, equal_var=False)
+
+    print("Hypotéza: Líši sa priemerný denný počet nehôd medzi pracovnými dňami a víkendom?\n")
+    print(f"  Priemerný počet nehôd (pracovné dni): {mean_workday}")
+    print(f"  Priemerný počet nehôd (víkend): {mean_weekday:}\n")
+    print(f"  Vypočítaná t-štatistika: {t_stat:}")
+    print(f"  P-hodnota (p-value): {p_value}\n")  
+
+    significance_level = 0.05
+
+    if p_value < significance_level:
+        print(f"P-hodnota je menšia ako nami zvolená hladina významnosti α ({significance_level}).")
+        print("Preto nulovú hypotézu (H₀) zamietame.")
+        print("Záver: Rozdiel v priemernom počte nehôd je štatisticky významný.")
+    else:
+        print(f"P-hodnota je väčšia ako nami zvolená hladina významnosti α ({significance_level}).")
+        print("Preto nulovú hypotézu (H₀) nezamietame.")
+        print("Záver: Nepodarilo sa preukázať štatisticky významný rozdiel.")
+
+
 def main():
     file_path = '../data/data.csv'
     file_data = load_data(file_path)
@@ -137,6 +171,7 @@ def main():
         plot_accidents_by_day(df_prepared)
         plot_accidents_by_season(df_prepared)
         plot_hourly_trend(df_prepared)
+        perform_t_test(df_prepared)
 
 
 if __name__ == "__main__":
