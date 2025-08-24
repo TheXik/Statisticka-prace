@@ -85,7 +85,6 @@ def plot_accidents_by_day(df):
     daily_accident_counts = df['day_of_week'].value_counts()
     days_order_english = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     daily_accident_counts.reindex(days_order_english).plot(kind='bar')
-    print(daily_accident_counts)
     plt.title('Number of Accidents by Day of the Week', fontsize=16, pad=20)
     plt.xlabel('Day of the Week', fontsize=12)
     plt.ylabel('Total Number of Accidents', fontsize=12)
@@ -145,10 +144,10 @@ def perform_t_test(df):
     t_stat, p_value = stats.ttest_ind(workdays, weekdays, equal_var=False)
 
     print("Hypotéza: Líši sa priemerný denný počet nehôd medzi pracovnými dňami a víkendom?\n")
-    print(f"  Priemerný počet nehôd (pracovné dni): {mean_workday}")
-    print(f"  Priemerný počet nehôd (víkend): {mean_weekday:}\n")
-    print(f"  Vypočítaná t-štatistika: {t_stat:}")
-    print(f"  P-hodnota (p-value): {p_value}\n")  
+    print(f"Priemerný počet nehôd (pracovné dni): {mean_workday}")
+    print(f"Priemerný počet nehôd (víkend): {mean_weekday:}\n")
+    print(f"Vypočítaná t-štatistika: {t_stat:}")
+    print(f"P-hodnota (p-value): {p_value}\n")
 
     significance_level = 0.05
 
