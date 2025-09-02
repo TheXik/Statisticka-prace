@@ -65,20 +65,20 @@ def prepare_data(df):
 
 
 def plot_weekday_vs_weekend(df):
-    """Plots the number of accidents for weekdays vs. weekends."""
+    """Plots the average number of accidents for weekdays vs. weekends."""
+    daily_data = df.groupby(df['date'].dt.date).agg(count=('date', 'size'), day_type=('day_type', 'first'))
+    avg_counts = daily_data.groupby('day_type')['count'].mean()
+    avg_counts = avg_counts.reindex(['Weekday', 'Weekend'])
     plt.figure()
-    weekday_weekend_counts = df['day_type'].value_counts()
-    weekday_weekend_counts.plot(kind='bar')
-    plt.title('Number of Accidents: Weekdays vs. Weekend', fontsize=12, pad=15)
+    avg_counts.plot(kind='bar')
+    plt.title('Average Number of Accidents per Day: Weekday vs. Weekend', fontsize=12, pad=15)
     plt.xlabel('Type of Day', fontsize=12)
-    plt.ylabel('Total Number of Accidents', fontsize=12)
+    plt.ylabel('Average Number of Accidents', fontsize=12)
     plt.xticks(rotation=0, fontsize=11)
     plt.yticks(fontsize=11)
     plt.tight_layout()
     plt.show()
     plt.close()
-
-
 def plot_accidents_by_day(df):
     """Plots the number of accidents for each day of the week."""
     plt.figure()
@@ -161,6 +161,34 @@ def perform_t_test(df):
         print("Záver: Nepodarilo sa preukázať štatisticky významný rozdiel.")
 
 
+def perform_seasonality_t_test(df):
+    """Performs t-test of the seasonality and prints the results."""
+    summer_df = df[df['season'] == 'Summer']
+    winter_df = df[df['season'] == 'Winter']
+    summer_daily_counts = summer_df.groupby(summer_df['date'].dt.date).size()
+    winter_daily_counts = winter_df.groupby(winter_df['date'].dt.date).size()
+    mean_summer = summer_daily_counts.mean()
+    mean_winter = winter_daily_counts.mean()
+
+    t_stat, p_value = stats.ttest_ind(summer_daily_counts, winter_daily_counts, equal_var=False)
+
+    print("Hypotéza: Líši sa priemerný denný počet nehôd medzi letom a zimou?\n")
+    print(f"Priemerný počet nehôd (leto): {mean_summer}")
+    print(f"Priemerný počet nehôd (zima): {mean_winter}\n")
+    print(f"Vypočítaná t-štatistika: {t_stat}")
+    print(f"P-hodnota (p-value): {p_value}\n")
+
+    significance_level = 0.05
+    if p_value < significance_level:
+        print(f"P-hodnota je menšia ako nami zvolená hladina významnosti α ({significance_level}).")
+        print("Preto nulovú hypotézu (H₀) zamietame.")
+        print("Záver: Rozdiel v priemernom počte nehôd medzi letom a zimou je štatisticky významný.")
+    else:
+        print(f"P-hodnota je väčšia ako nami zvolená hladina významnosti α ({significance_level}).")
+        print("Preto nulovú hypotézu (H₀) nezamietame.")
+        print("Záver: Nepodarilo sa preukázať štatisticky významný rozdiel.")
+
+
 def main():
     file_path = '../data/data.csv'
     file_data = load_data(file_path)
@@ -171,6 +199,8 @@ def main():
         plot_accidents_by_season(df_prepared)
         plot_hourly_trend(df_prepared)
         perform_t_test(df_prepared)
+        perform_seasonality_t_test(df_prepared)
+
 
 
 if __name__ == "__main__":

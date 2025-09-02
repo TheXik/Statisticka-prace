@@ -86,6 +86,19 @@ Graf porovnáva celkový počet nehôd v jednotlivých ročných obdobiach.
 Paradoxne tento graf ukazuje presný opak. Možným vysvetlením je, že počas Vianoc a zimných prázdnin je v Brne menej ľudí a teda aj menej áut.
 Menej áut na cestách tak zrejme zníži počet nehôd viac, ako ho zvýši zlé počasie.
 
+Nulová hypotéza: Líši sa priemerný denný počet nehôd medzi letom a zimou?
+
+Priemerný počet nehôd (leto): 11.647843137254903
+Priemerný počet nehôd (zima): 10.209150326797385
+
+Vypočítaná t-štatistika: 5.58207688298294
+P-hodnota (p-value): 2.6333525643935338e-08
+
+P-hodnota je menšia ako nami zvolená hladina významnosti α (0.05)
+Preto nulovú hypotézu (H₀) zamietame
+Záver: Rozdiel v priemernom počte nehôd medzi letom a zimou je štatisticky významný.
+
+
 
 ## Štatistické testovanie hypotéz
 
